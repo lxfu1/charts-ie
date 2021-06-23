@@ -1,49 +1,15 @@
-import React from "react";
-import Line from "@ant-design/charts/es/line";
+import React, { memo } from "react";
+import { Line } from "@ant-design/charts";
 
-// @ts-ignore
-// const { Line } = window.charts_all;
-const DemoLine: React.FC = () => {
-  var data = [
-    {
-      year: "1991",
-      value: 3,
-    },
-    {
-      year: "1992",
-      value: 4,
-    },
-    {
-      year: "1993",
-      value: 3.5,
-    },
-    {
-      year: "1994",
-      value: 5,
-    },
-    {
-      year: "1995",
-      value: 4.9,
-    },
-    {
-      year: "1996",
-      value: 6,
-    },
-    {
-      year: "1997",
-      value: 7,
-    },
-    {
-      year: "1998",
-      value: 9,
-    },
-    {
-      year: "1999",
-      value: 13,
-    },
-  ];
-  var config = {
-    data: data,
+interface Props {
+  data: Array<{
+    year: string;
+    value: number;
+  }>;
+}
+const DemoLine: React.FC<Props> = ({ data }) => {
+  const config = {
+    data,
     xField: "year",
     yField: "value",
     label: {},
@@ -54,6 +20,11 @@ const DemoLine: React.FC = () => {
         fill: "white",
         stroke: "#5B8FF9",
         lineWidth: 2,
+      },
+    },
+    yAxis: {
+      label: {
+        formatter: (v: string) => v,
       },
     },
     tooltip: { showMarkers: false },
@@ -67,24 +38,11 @@ const DemoLine: React.FC = () => {
         },
       },
     },
-    theme: {
-      geometries: {
-        point: {
-          diamond: {
-            active: {
-              style: {
-                shadowColor: "#FCEBB9",
-                shadowBlur: 2,
-                stroke: "#F6BD16",
-              },
-            },
-          },
-        },
-      },
-    },
-    interactions: [{ type: "marker-active" }],
   };
   return <Line {...config} />;
 };
 
-export default DemoLine;
+// 自己判断是否需要更新，data 不同时返回 false
+const isEqual = (prevProps: Props, nextProps: Props) => true;
+
+export default memo(DemoLine, isEqual);
